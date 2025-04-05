@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PG Expense Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; background: #f4f4f4; }
+    h1 { color: #333; }
+    label, input, select { display: block; margin: 1rem 0; }
+    input[type='range'] { width: 100%; }
+    .result { background: #fff; padding: 1rem; border-radius: 5px; margin-top: 2rem; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .result span { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>PG Monthly Cost Calculator</h1>
+
+  <label>Total PG Members:
+    <input type="number" id="members" value="80">
+  </label>
+
+  <label>Monthly Food & Utility Cost (₹):
+    <input type="number" id="baseCost" value="197500">
+  </label>
+
+  <label>Rent (₹):
+    <select id="rent">
+      <option value="150000">₹1,50,000 - Budget Area</option>
+      <option value="200000" selected>₹2,00,000 - Mid-Range Area</option>
+      <option value="250000">₹2,50,000 - Prime Area</option>
+    </select>
+  </label>
+
+  <label>Profit per Person (₹): <span id="profitDisplay">₹1000</span>
+    <input type="range" id="profit" min="0" max="2000" value="1000" step="100">
+  </label>
+
+  <div class="result">
+    <p>Total Monthly Cost: <span id="totalCost">₹0</span></p>
+    <p>Cost per Member (without profit): <span id="costPerMember">₹0</span></p>
+    <p>Final Price per Member (with profit): <span id="finalPrice">₹0</span></p>
+  </div>
+
+  <script>
+    const membersInput = document.getElementById("members");
+    const baseCostInput = document.getElementById("baseCost");
+    const rentSelect = document.getElementById("rent");
+    const profitRange = document.getElementById("profit");
+    const profitDisplay = document.getElementById("profitDisplay");
+
+    const totalCostEl = document.getElementById("totalCost");
+    const costPerMemberEl = document.getElementById("costPerMember");
+    const finalPriceEl = document.getElementById("finalPrice");
+
+    function updateCalculator() {
+      const members = parseInt(membersInput.value) || 1;
+      const baseCost = parseInt(baseCostInput.value) || 0;
+      const rent = parseInt(rentSelect.value) || 0;
+      const profit = parseInt(profitRange.value) || 0;
+
+      profitDisplay.innerText = `₹${profit}`;
+
+      const totalCost = baseCost + rent;
+      const perMember = Math.ceil(totalCost / members);
+      const finalPrice = perMember + profit;
+
+      totalCostEl.innerText = `₹${totalCost.toLocaleString()}`;
+      costPerMemberEl.innerText = `₹${perMember.toLocaleString()}`;
+      finalPriceEl.innerText = `₹${finalPrice.toLocaleString()}`;
+    }
+
+    membersInput.addEventListener("input", updateCalculator);
+    baseCostInput.addEventListener("input", updateCalculator);
+    rentSelect.addEventListener("change", updateCalculator);
+    profitRange.addEventListener("input", updateCalculator);
+
+    updateCalculator();
+  </script>
+</body>
+</html>
